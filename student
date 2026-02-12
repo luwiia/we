@@ -42,7 +42,7 @@ void Student::AddMark(int mark) {
     marks = marks2;
 }
 
-void Student::AddMarks(int *marks) {
+void Student::AddMarks(int* marks) {
     int n = sizeof(marks) / sizeof(int);
     for (int i = 0; i < n; ++i)
         AddMark(marks[i]);
@@ -54,6 +54,24 @@ Student::~Student() {
 
 int main()
 {
-    Student student;
+    int n;
+    cin >> n;
+    int* m = new int[n];
+    Student st("Sofi", "Dyachenko", "CV12", 19, m);
+    for (int i = 0; i < n; i++) {
+        cin >> m[i];
+    }
+    double avg = st.GetAvg();
+    cout << avg;
+    
+    int n2;
+    cin >> n2;
+    int* newmarks = new int[n2];
+    for (int i = 0; i < n2; i++)
+        cin >> newmarks[i];
+    st.AddMarks(newmarks);
+    double avg1 = st.GetAvg();
+    cout << avg1;
+    delete[] newmarks;
 
 }
