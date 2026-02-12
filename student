@@ -1,0 +1,59 @@
+#include <iostream>
+
+using namespace std;
+
+class Student
+{
+private:
+    string lastname, surname, group;
+    int age;
+    int* marks;
+public:
+    Student(string, string, string, int, int*);
+    double GetAvg();
+    void AddMark(int mark);
+    void AddMarks(int* marks);
+    ~Student();
+};
+
+Student::Student(string l, string s, string g, int a, int* m) {
+    lastname = l;
+    surname = s;
+    group = g;
+    age = a;
+    marks = m;
+}
+
+double Student::GetAvg() {
+    int k = sizeof(marks) / sizeof(int);
+    double s = 0;
+    for (int i = 0; i < k; ++i)
+        s += marks[i];
+    return s / k;
+}
+
+void Student::AddMark(int mark) {
+    int n = sizeof(marks) / sizeof(int);
+    int* marks2 = new int[n + 1];
+    for (int i = 0; i < n; ++i)
+        marks2[i] = marks[i];
+    marks2[n] = mark;
+    delete marks;
+    marks = marks2;
+}
+
+void Student::AddMarks(int *marks) {
+    int n = sizeof(marks) / sizeof(int);
+    for (int i = 0; i < n; ++i)
+        AddMark(marks[i]);
+}
+
+Student::~Student() {
+    delete marks;
+}
+
+int main()
+{
+    Student student;
+
+}
