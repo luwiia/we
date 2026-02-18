@@ -1,0 +1,93 @@
+#include <iostream>
+using namespace std;
+
+class Book
+{
+private:  
+    string title;
+    string author;
+    string publisher;
+    int year;
+    int pages;
+    
+public:
+    Book(); // по умолчанию
+    Book(string t, string a); // только название и автор
+    Book(string t, string a, string p, int y, int pg); // полный
+    
+    // Методы
+    void PrintInfo();
+    void SetPublisher(string p);
+    void SetYear(int y);
+    void SetPages(int pg);
+    
+    ~Book(); // Деструктор
+};
+
+Book::Book() {
+    title = "Неизвестно";
+    author = "Неизвестно";
+    publisher = "Неизвестно";
+    year = 0;
+    pages = 0;
+    cout << "Создана книга (пустая)" << endl;
+}
+
+Book::Book(string t, string a) {
+    title = t;
+    author = a;
+    publisher = "Неизвестно";
+    year = 0;
+    pages = 0;
+    cout << "Создана книга: " << title << endl;
+}
+
+Book::Book(string t, string a, string p, int y, int pg) {
+    title = t;
+    author = a;
+    publisher = p;
+    year = y;
+    pages = pg;
+    cout << "Создана книга: " << title << endl;
+}
+
+void Book::PrintInfo() {
+    cout << "Информация о книге:" << endl;
+    cout << "Название: " << title << endl;
+    cout << "Автор: " << author << endl;
+    cout << "Издательство: " << publisher << endl;
+    cout << "Год издания: " << year << endl;
+    cout << "Количество страниц: " << pages << endl;
+}
+
+//методы для изменения полей
+void Book::SetPublisher(string p) {
+    publisher = p;  // Просто присваиваем новое значение
+}
+
+void Book::SetYear(int y) {
+    year = y;
+}
+
+void Book::SetPages(int pg) {
+    pages = pg;
+}
+
+// Деструктор - вызывается при удалении объекта
+Book::~Book() {
+}
+
+int main() {
+    Book book1; // Вызов конструктора по умолчанию
+    book1.PrintInfo();
+    
+    Book book2("Война и мир", "Лев Толстой");
+    book2.SetPublisher("АСТ");      // Изменяем издательство
+    book2.SetYear(1869);             // Изменяем год
+    book2.SetPages(1300);            // Изменяем страницы
+    book2.PrintInfo();
+    
+    // Вызов полного конструктора
+    Book book3("Преступление и наказание", "Достоевский", "Эксмо", 1866, 672);
+    book3.PrintInfo();
+} 
