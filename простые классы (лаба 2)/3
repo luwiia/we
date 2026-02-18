@@ -1,0 +1,92 @@
+#include <iostream>
+using namespace std;
+
+class Product
+{
+private:
+    string name;
+    double price;
+    int count;
+    
+public:
+    Product();
+    Product(string n, double p);
+    Product(string n, double p, int q);
+    
+    // Методы
+    void AddQuantity(int amount);
+    void RemoveQuantity(int amount);
+    void SetPrice(double p);
+    void PrintInfo();
+    
+    ~Product();
+};
+
+Product::Product() {
+    name = "Неизвестно";
+    price = 0.0;
+    count = 0;
+    cout << "Создан товар (пустой)" << endl;
+}
+
+Product::Product(string n, double p) {
+    name = n;
+    price = p;
+    count = 0;
+    cout << "Создан товар: " << name << " цена: " << price << endl;
+}
+
+Product::Product(string n, double p, int q) {
+    name = n;
+    price = p;
+    count = q;
+    cout << "Создан товар: " << name << " цена: " << price << " количество: " << count << endl;
+}
+
+//метод для добавления товара на склад
+void Product::AddQuantity(int cou) {
+    count += cou;  // Увеличиваем количество
+    cout << "Добавлено " << cou << " шт. Теперь на складе: " << count << endl;
+}
+
+//удаление
+void Product::RemoveQuantity(int cou) {
+
+    //проверка, что есть достаточно товара
+    if (cou <= count) {
+        count -= cou;  // Уменьшаем количество
+        cout << "продано " << cou << " шт. Осталось: " << count << endl;
+    } else {
+        cout << "недостаточно товара на складе." << count << endl;
+    }
+}
+
+// Изменение цены
+void Product::SetPrice(double p) {
+    price = p;
+    cout << "Цена изменена на: " << price << endl;
+}
+
+void Product::PrintInfo() {
+    cout << "Информация о товаре" << endl;
+    cout << "Название: " << name << endl;
+    cout << "Цена: " << price << " руб." << endl;
+    cout << "Количество на складе: " << count << " шт." << endl;
+}
+
+Product::~Product() {}
+
+int main() {
+    Product p1;  // Пустой товар
+    p1.PrintInfo();
+    
+    Product p2("Ноутбук", 50000);
+    p2.AddQuantity(10);
+    p2.RemoveQuantity(3);
+    p2.PrintInfo();
+    
+    Product p3("Телефон", 25000, 15);
+    p3.RemoveQuantity(20);
+    p3.SetPrice(23000);
+    p3.PrintInfo();
+}
