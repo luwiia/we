@@ -1,0 +1,104 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Person
+{
+private:
+    string name;
+    string surname;
+    int age;
+    char gender;
+    double height;
+    double weight;
+    
+public:
+    Person();
+    Person(string n, string s, int a);
+    Person(string n, string s, int a, char g, double h, double w);
+    
+    double CalculateIMT();
+    void PrintInfo();
+    void SetHeight(double h);
+    void SetWeight(double w);
+    void SetAge(int a);
+    
+    ~Person();
+};
+
+Person::Person() {
+    name = "Неизвестно";
+    surname = "Неизвестно";
+    age = 0;
+    gender = 'U';
+    height = 0;
+    weight = 0;
+}
+
+Person::Person(string n, string s, int a) {
+    name = n;
+    surname = s;
+    age = a;
+    gender = 'U';
+    height = 0;
+    weight = 0;
+}
+
+Person::Person(string n, string s, int a, char g, double h, double w) {
+    name = n;
+    surname = s;
+    age = a;
+    gender = g;
+    height = h;
+    weight = w;
+}
+
+// Расчет индекса массы тела (ИМТ)
+// Формула: вес (кг) / (рост в метрах)^2
+double Person::CalculateIMT() {
+    return weight / (height * height);
+}
+
+void Person::PrintInfo() {
+    cout << "Информация о человеке" << endl;
+    cout << "Имя: " << name << endl;
+    cout << "Фамилия: " << surname << endl;
+    cout << "Возраст: " << age << endl;
+    cout << "Пол: " << (gender == 'M' ? "Мужской" : 
+                        gender == 'F' ? "Женский" : "Не указан") << endl;
+    cout << "Рост: " << height << " м" << endl;
+    cout << "Вес: " << weight << " кг" << endl;
+    
+    // Вычисляем ИМТ и категорию
+    double imt = CalculateIMT();
+        cout << "ИМТ: " << imt <<  endl;
+}
+
+void Person::SetHeight(double h) {
+    height = h;
+}
+
+// Сеттер для веса с проверкой
+void Person::SetWeight(double w) {
+    weight = w;
+}
+
+// Увеличиваем возраст на 1
+void Person::SetAge(int a) {
+   age = a;
+}
+
+Person::~Person() {}
+
+int main() {
+    Person p1;
+    p1.PrintInfo();
+    
+    Person p2("Иван", "Петров", 25);
+    p2.SetHeight(1.75);
+    p2.SetWeight(70);
+    p2.PrintInfo();
+    
+    Person p3("Мария", "Иванова", 30, 'F', 1.65, 55);
+    p3.SetAge(1);
+    p3.PrintInfo();
+}
