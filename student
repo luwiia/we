@@ -1,77 +1,112 @@
-#include <iostream>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-class Student
+class student
 {
-private:
-    string lastname, surname, group;
-    int age;
-    int* marks;
-public:
-    Student(string, string, string, int, int*);
-    double GetAvg();
-    void AddMark(int mark);
-    void AddMarks(int* marks);
-    ~Student();
+    private:
+        string name;
+        string surname;
+        string group;
+        unsigned int age;
+        int* marks;
+        int count;
+        
+    public:
+        student(string,string,string,unsigned int, int*,int);
+        
+        double GetAvg();
+        void AddMark(int mark);
+        void AddMarks(int* marks, int count);
+        
+        ~student();
 };
 
-Student::Student(string l, string s, string g, int a, int* m) {
-    lastname = l;
-    surname = s;
-    group = g;
-    age = a;
-    marks = m;
-}
+//конструктор
+student::student(string a, string b, string c, unsigned int d, int* e, int f){
+    name = a;
+    surname = b;
+    group = c;
+    age = d;
 
-double Student::GetAvg() {
-    int k = sizeof(marks) / sizeof(int);
-    double s = 0;
-    for (int i = 0; i < k; ++i)
-        s += marks[i];
-    return s / k;
-}
-
-void Student::AddMark(int mark) {
-    int n = sizeof(marks) / sizeof(int);
-    int* marks2 = new int[n + 1];
-    for (int i = 0; i < n; ++i)
-        marks2[i] = marks[i];
-    marks2[n] = mark;
-    delete marks;
-    marks = marks2;
-}
-
-void Student::AddMarks(int* marks) {
-    int n = sizeof(marks) / sizeof(int);
-    for (int i = 0; i < n; ++i)
-        AddMark(marks[i]);
-}
-
-Student::~Student() {
-    delete marks;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    int* m = new int[n];
-    Student st("Sofi", "Dyachenko", "CV12", 19, m);
-    for (int i = 0; i < n; i++) {
-        cin >> m[i];
-    }
-    double avg = st.GetAvg();
-    cout << avg;
+    count = f;
     
+    //лучше скопировать массив, а не использовать старый, то есть, не marks = e; 
+    marks = new int[count];
+    for (int i = 0; i< count; i++){
+        marks[i] = e[i];
+    }
+}
+
+double student::GetAvg(){
+    if (count == 0) return 0;
+    
+    double s = 0;
+    for (int i=0; i <count; i++){
+        s += marks[i];
+    }
+    
+    return s/count;
+}
+
+void student::AddMark(int mark){
+    int* marks2 = new int[count+1];
+    
+    //копируем старый;
+        for (int i = 0; i< count; i++)
+        marks2[i] = marks[i];
+        
+        
+    marks2[count] = mark;
+    
+    delete[] marks;
+    
+    marks = marks2;
+    //мы удалили marks в 60 строке, поэтому нужно запомнить новый адркс, что и происходит в 62 строке;
+    
+    count++;
+}
+
+void student::AddMarks(int* newmarks, int count){
+    // newMarks - указатель на массив с только доп оценками
+    for (int i =0; i <count; i++){
+        AddMark(newmarks[i]);
+    }
+}
+
+student::~student(){
+    delete[] marks;
+}
+
+
+int main() {
+	int n;
+	cin >> n;
+	
+	int* before = new int[n];  // Создаем временный массив
+	
+	// Вводим оценки
+    for (int i = 0; i < n; i++) {
+        cin >> before[i];
+    }
+    
+    student sofa("Sofa", "Dyachenko", "CV12", 19, before, n);
+    
+    delete[] before;
+    
+    double avg = sofa.GetAvg();
+    cout << "средний балл до: " << avg << endl;
+    
+    //новые оценки
     int n2;
     cin >> n2;
     int* newmarks = new int[n2];
     for (int i = 0; i < n2; i++)
         cin >> newmarks[i];
-    st.AddMarks(newmarks);
-    double avg1 = st.GetAvg();
-    cout << avg1;
+        
+    sofa.AddMarks(newmarks, n2);
+    
+    double avgnew = sofa.GetAvg();
+    cout << "средний балл после: " << avgnew << endl;
+    
     delete[] newmarks;
-
 }
