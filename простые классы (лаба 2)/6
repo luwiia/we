@@ -1,0 +1,131 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Класс для товара
+class Item
+{
+public:
+    string name;
+    double price;
+    int quantity;
+    
+    Item() {}
+    Item(string n, double p, int q) {
+        name = n;
+        price = p;
+        quantity = q;
+    }
+};
+
+class Order
+{
+private:
+    int number;
+    string date;
+    Item* items;        // список товаров
+    int count;          // количество товаров
+    double total;       // общая стоимость
+    
+public:
+    // Конструкторы
+    Order() {
+        number = 0;
+        date = "00.00.0000";
+        items = nullptr;
+        count = 0;
+        total = 0;
+    }
+    
+    Order(int n, string d) {
+        number = n;
+        date = d;
+        items = nullptr;
+        count = 0;
+        total = 0;
+    }
+    
+    Order(int n, string d, Item* it, int c) {
+        number = n;
+        date = d;
+        
+        count = c;
+        items = new Item[count];
+        for (int i = 0; i < count; i++) {
+            items[i] = it[i];
+            total += items[i].price * items[i].quantity;
+        }
+    }
+    
+    // Методы
+    void AddItem(Item it) {
+        // Создаем новый массив
+        Item* newItems = new Item[count + 1];
+        
+        // Копируем старые
+        for (int i = 0; i < count; i++) {
+            newItems[i] = items[i];
+        }
+        
+        // Добавляем новый
+        newItems[count] = it;
+        
+        // Обновляем
+        delete[] items;
+        items = newItems;
+        count++;
+        total += it.price * it.quantity;
+        
+        cout << "Добавлен товар: " << it.name << endl;
+    }
+    
+    void AddItem(string name, double price, int quantity) {
+        Item it(name, price, quantity);
+        AddItem(it);
+    }
+    
+    void PrintOrder() {
+        cout << "\n=== ORDER №" << number << " ===" << endl;
+        cout << "Date: " << date << endl;
+        cout << "Items:" << endl;
+        
+        if (count == 0) {
+            cout << "  No items" << endl;
+        } else {
+            for (int i = 0; i < count; i++) {
+                cout << i+1 << ". " << items[i].name 
+                     << " | " << items[i].price << " rub | "
+                     << items[i].quantity << " pcs | Total: "
+                     << items[i].price * items[i].quantity << " rub" << endl;
+            }
+        }
+        
+        cout << "TOTAL: " << total << " rub" << endl;
+    }
+    
+    ~Order() {
+        delete[] items;
+    }
+};
+
+int main()
+{
+    // Test 1: Empty order
+    Order o1;
+    o1.PrintOrder();
+    
+    // Test 2: Order with number and date
+    Order o2(1001, "18.02.2026");
+    o2.AddItem("Laptop", 50000, 1);
+    o2.AddItem("Mouse", 1500, 2);
+    o2.PrintOrder();
+    
+    // Test 3: Order with existing items
+    Item items[] = {
+        Item("Bread", 50, 2),
+        Item("Milk", 80, 3)
+    };
+    
+    Order o3(1002, "19.02.2026", items, 2);
+    o3.AddItem("Eggs", 120, 1);
+    o3.PrintOrder();
+}
