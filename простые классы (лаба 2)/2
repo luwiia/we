@@ -30,7 +30,6 @@ Book::Book() {
     publisher = "Неизвестно";
     year = 0;
     pages = 0;
-    cout << "Создана книга (пустая)" << endl;
 }
 
 Book::Book(string t, string a) {
@@ -39,7 +38,6 @@ Book::Book(string t, string a) {
     publisher = "Неизвестно";
     year = 0;
     pages = 0;
-    cout << "Создана книга: " << title << endl;
 }
 
 Book::Book(string t, string a, string p, int y, int pg) {
@@ -48,7 +46,6 @@ Book::Book(string t, string a, string p, int y, int pg) {
     publisher = p;
     year = y;
     pages = pg;
-    cout << "Создана книга: " << title << endl;
 }
 
 void Book::PrintInfo() {
@@ -62,7 +59,7 @@ void Book::PrintInfo() {
 
 //методы для изменения полей
 void Book::SetPublisher(string p) {
-    publisher = p;  // Просто присваиваем новое значение
+    publisher = p;  
 }
 
 void Book::SetYear(int y) {
@@ -73,7 +70,6 @@ void Book::SetPages(int pg) {
     pages = pg;
 }
 
-// Деструктор - вызывается при удалении объекта
 Book::~Book() {
 }
 
