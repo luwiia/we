@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+
+class Car
+{
+private:
+    string brand;
+    string model;
+    int year;
+    string color;
+    int doors;
+    
+public:
+    Car();
+    Car(string b, string m);
+    Car(string b, string m, int y, string c, int d);
+    
+    void PrintInfo();
+    void SetYear(int y);
+    void SetColor(string c);
+    void SetDoors(int d);
+    void Repaint(string newColor);
+    
+    ~Car();
+};
+
+Car::Car() {
+    brand = "Неизвестно";
+    model = "Неизвестно";
+    year = 0;
+    color = "Неизвестно";
+    doors = 4;
+}
+
+Car::Car(string b, string m) {
+    brand = b;
+    model = m;
+    year = 0;
+    color = "Неизвестно";
+    doors = 4;
+}
+
+Car::Car(string b, string m, int y, string c, int d) {
+    brand = b;
+    model = m;
+    year = y;
+    color = c;
+    doors = d;
+}
+
+void Car::PrintInfo() {
+    cout << "Информация об автомобиле" << endl;
+    cout << "Марка: " << brand << endl;
+    cout << "Модель: " << model << endl;
+    cout << "Год выпуска: " << year << endl;
+    cout << "Цвет: " << color << endl;
+    cout << "Количество дверей: " << doors << endl;
+}
+
+void Car::SetYear(int y) {
+    year = y;
+}
+
+void Car::SetColor(string c) {
+    color = c;
+}
+
+void Car::SetDoors(int d) {
+    doors = d;
+}
+
+void Car::Repaint(string newColor) {
+    color = newColor;
+}
+
+Car::~Car() {}
+
+int main() {
+    Car car1;  // Пустой автомобиль
+    car1.PrintInfo();
+    
+    Car car2("Toyota", "Camry");
+    car2.SetYear(2020);
+    car2.SetColor("Черный");
+    car2.SetDoors(4);
+    car2.PrintInfo();
+    
+    Car car3("BMW", "X5", 2022, "Белый", 5);
+    car3.Repaint("Синий");
+    car3.PrintInfo();
+}
