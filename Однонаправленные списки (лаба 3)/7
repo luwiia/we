@@ -40,6 +40,7 @@ void print(list* beg)
     }
 }
 
+
 list* del(list* beg){
   if (beg==NULL || beg->next==NULL) return beg;
   
