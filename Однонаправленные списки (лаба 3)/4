@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+struct list{
+    int info;
+    list* next;
+};
+
+list* make()
+{
+    list* beg = new(list);
+    list *p;
+    int x;
+    cin >> x;
+    
+    beg->info = x;
+    beg->next = NULL;
+    p = beg;
+    
+    while (x!=0){
+        cin >> x;
+        if (x!=0){
+            list* r = new(list);
+            r->info = x;
+            r->next= NULL;
+            p->next= r;
+            p = r;
+        }
+    }
+    return beg;
+}
+
+void print(list* beg)
+{
+    list* p = beg;
+    while (p != NULL)
+    {
+        cout << "Elem:" << p->info << endl;
+        p = p->next;
+    }
+}
+
+int sum(list* beg){
+    list *p = beg;
+    int sum = 0;
+    
+    while (p!=NULL){
+        if (p->info%2!=0) {
+            sum += p->info;
+        }
+        p = p->next;
+    }
+    return sum;
+}
+
+void replace(list* beg){
+    list *p = beg;
+    int sum1 = sum(beg);
+    while (p!=NULL){
+        if (p->info%3!=0) p->info=sum1;
+        p = p->next;
+    }
+}
+
+int main(){
+    list* beg = make();
+    print(beg);
+    replace(beg);
+    print(beg);
+}
+
+// 7 7 3 0 -> 17 17 3
