@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+
+struct list{
+    int info;
+    list* next;
+};
+
+list* make()
+{
+    list* beg = new(list);
+    list *p;
+    int x;
+    cin >> x;
+    
+    beg->info = x;
+    beg->next = NULL;
+    p = beg;
+    
+    while (x!=0){
+        cin >> x;
+        if (x!=0){
+            list* r = new(list);
+            r->info = x;
+            r->next= NULL;
+            p->next= r;
+            p = r;
+        }
+    }
+    return beg;
+}
+
+void print(list* beg)
+{
+    list* p = beg;
+    while (p != NULL)
+    {
+        cout << "Elem:" << p->info << endl;
+        p = p->next;
+    }
+}
+
+int average(list* beg){
+    list *p = beg;
+    int sum = 0, n = 0;
+    
+    while (p!=NULL){
+        if (p->info>0) {
+            sum += p->info;
+            n ++;
+        }
+        p = p->next;
+    }
+    return sum/n;
+}
+
+int count(list* beg){
+    list *p = beg;
+    int count = 0;
+    int ave = average(beg);
+    
+    while (p!=NULL){
+        if (p->info%5==0 && p->info>ave) count++;
+        p = p->next;
+    }
+    return count;
+}
+
+int main(){
+    list* beg = make();
+    print(beg);
+    cout << count(beg);
+}
+
+// -3 5 1 0 -> 1
