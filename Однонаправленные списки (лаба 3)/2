@@ -1,0 +1,59 @@
+#include <iostream>
+using namespace std;
+
+struct list{
+    int info;
+    list* next;
+};
+
+list* make()
+{
+    list* beg = new(list);
+    list *p;
+    int x;
+    cin >> x;
+    
+    beg->info = x;
+    beg->next = NULL;
+    p = beg;
+    
+    while (x!=0){
+        cin >> x;
+        if (x!=0){
+            list* r = new(list);
+            r->info = x;
+            r->next= NULL;
+            p->next= r;
+            p = r;
+        }
+    }
+    return beg;
+}
+
+void print(list* beg)
+{
+    list* p = beg;
+    while (p != NULL)
+    {
+        cout << "Elem:" << p->info << endl;
+        p = p->next;
+    }
+}
+
+void replace(list* beg){
+    list *p = beg;
+    
+    while (p!=NULL){
+        if (p->info<0 && p->next->info%2!=0) p->info=abs(p->info);
+        p = p->next;
+    }
+}
+
+int main(){
+    list* beg = make();
+    print(beg);
+    replace(beg);
+    print(beg);
+}
+
+// -3 5 9 0 -> 3 5 9 
