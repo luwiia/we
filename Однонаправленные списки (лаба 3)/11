@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+struct list{
+    int info;
+    list* next;
+};
+
+list* make()
+{
+    list* beg = new(list);
+    list *p;
+    int x;
+    cin >> x;
+    
+    beg->info = x;
+    beg->next = NULL;
+    p = beg;
+    
+    while (x!=0){
+        cin >> x;
+        if (x!=0){
+            list* r = new(list);
+            r->info = x;
+            r->next= NULL;
+            p->next= r;
+            p = r;
+        }
+    }
+    return beg;
+}
+
+void print(list* beg)
+{
+    list* p = beg;
+    while (p != NULL)
+    {
+        cout << "Elem:" << p->info << endl;
+        p = p->next;
+    }
+}
+
+list* insert(list* beg) {
+    list* fake = new(list);
+    fake->next = beg;
+    
+    list* prev = fake;  // предыдущий элемент
+    list* curr = beg;    // текущий элемент
+    
+    while (curr != NULL) {
+        if (curr->info % 2 != 0) {  
+            list* new_elem = new(list);
+            new_elem->info = 5;
+
+            new_elem->next = curr;
+            prev->next = new_elem;
+            
+            prev = new_elem;
+        } else {
+            prev = curr;
+        }
+        curr = curr->next; 
+    }
+    
+    list* new_beg = fake->next;
+    delete fake;
+    return new_beg;
+}
+
+
+int main(){
+    list* beg = make();
+    print(beg);
+    beg = insert(beg);
+    print(beg);
+}
+
+// 7 4 9 0 -> 5 7 4 5 9
