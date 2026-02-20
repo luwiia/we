@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+
+struct list{
+    int info;
+    list* next;
+};
+
+list* make()
+{
+    list* beg = new(list);
+    list *p;
+    int x;
+    cin >> x;
+    
+    beg->info = x;
+    beg->next = NULL;
+    p = beg;
+    
+    while (x!=0){
+        cin >> x;
+        if (x!=0){
+            list* r = new(list);
+            r->info = x;
+            r->next= NULL;
+            p->next= r;
+            p = r;
+        }
+    }
+    return beg;
+}
+
+void print(list* beg)
+{
+    list* p = beg;
+    while (p != NULL)
+    {
+        cout << "Elem:" << p->info << endl;
+        p = p->next;
+    }
+}
+
+void insert(list* beg, int vst){
+    if (beg == NULL || beg->next == NULL) return;
+    
+    list *p = beg;
+    while (p != NULL && p->next != NULL){
+        if (p->info % 2 == 0 && p->next->info % 2 == 0) {
+            list *elem = new(list);
+            elem->info = vst;
+            
+            elem->next = p->next;
+            p->next=elem;
+            
+            p = elem->next;
+        }
+        else p = p->next;
+    }
+}
+
+
+int main(){
+    list* beg = make();
+    print(beg);
+    insert(beg, 42);
+    print(beg);
+}
+
+// 4 4 0 -> 3 3
