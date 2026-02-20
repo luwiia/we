@@ -1,0 +1,63 @@
+#include <iostream>
+using namespace std;
+
+struct list{
+    int info;
+    list* next;
+};
+
+list* make()
+{
+    list* beg = new(list);
+    list *p;
+    int x;
+    cin >> x;
+    
+    beg->info = x;
+    beg->next = NULL;
+    p = beg;
+    
+    while (x!=0){
+        cin >> x;
+        if (x!=0){
+            list* r = new(list);
+            r->info = x;
+            r->next= NULL;
+            p->next= r;
+            p = r;
+        }
+    }
+    return beg;
+}
+
+void print(list* beg)
+{
+    list* p = beg;
+    while (p != NULL)
+    {
+        cout << "Elem:" << p->info << endl;
+        p = p->next;
+    }
+}
+
+
+bool sorted(list* beg){
+    list *p = beg;
+    bool fl = 1;
+    while (p!=NULL && p->next!=NULL){
+        if (p->info>p->next->info) fl = 0;;
+        p = p->next;
+    }
+    return fl;
+}
+
+int main(){
+    list* beg = make();
+    print(beg);
+    bool fl = sorted(beg);
+    if (fl == 1) cout <<"упорядоченный";
+    else cout << "неупорядоченный";
+}
+
+// 3 2 3 0 -> неупорядоченный
+// 1 2 3 0 -> упорядоченный
