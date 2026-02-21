@@ -1,0 +1,23 @@
+#include <opencv2/opencv.hpp>
+#include <iostream>
+using namespace cv;
+using namespace std; [2](https://www.opencv-srf.com/2018/01/save-images-and-videos-to-file.html)
+
+int main() {
+    // Чтение изображения из файла
+    Mat image = imread("image.png");
+    // Проверка на успешность чтения
+    if (image.empty()) {
+        std::cout << "Unable to read image" << std::endl;
+        return -1;
+    }
+    // Сохранение изображения
+    bool isSuccess = imwrite("image.png", image);
+    if (isSuccess == false) {
+        std::cout << "Failed to save the image" << std::endl;
+        cin.get(); // ждать нажатия любой клавиши
+        return -1;
+    }
+    std::cout << "Image is successfully saved to a file" << std::endl;
+    return 0;
+}
