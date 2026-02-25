@@ -1,0 +1,99 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+struct list {
+    int info;
+    list* next;
+};
+
+
+list* make() {
+    list* beg = NULL;
+    list* p = NULL;
+    int x;
+    cin >> x;
+
+    if (x == 0) return NULL;
+
+    beg = new(list);
+    beg->info = x;
+    beg->next = NULL;
+    p = beg;
+
+    while (true) {
+        cin >> x;
+        if (x == 0) break;
+
+        list* r = new(list);
+        r->info = x;
+        r->next = NULL;
+        p->next = r;
+        p = r;
+    }
+    return beg;
+}
+
+
+void print(list* beg) {
+    list* p = beg;
+    while (p != NULL) {
+        cout << p->info << " ";
+        p = p->next;
+    }
+    cout << endl;
+}
+
+bool prost(int n) {
+    bool flag = 1;
+ 
+    for (int i = 2; i < n; i++) {
+        if (n % i == 0) {
+            flag = 0;
+        }
+    }
+
+    return flag;
+}
+
+list* removePrimes(list*& beg) {
+    if (beg == NULL) return NULL;
+
+    // Удаляем простые числа в начале списка
+    while (beg != NULL && prost(beg->info)) {
+        list* temp = beg;
+        beg = beg->next;
+        delete temp;
+    }
+
+    // Если после удаления первых элементов список пуст
+    if (beg == NULL) return NULL;
+
+    // Проходим по остальному списку
+    list* current = beg;
+    while (current->next != NULL) {
+        if (prost(current->next->info)) {
+            // Удаляем следующий элемент
+            list* toDelete = current->next;
+            current->next = toDelete->next;
+            delete toDelete;
+            // Не переходим дальше, так как current->next теперь указывает на новый элемент
+        }
+        else {
+            // Переходим к следующему элементу
+            current = current->next;
+        }
+    }
+
+    return beg;
+}
+
+
+
+int main() {
+    list* beg = make();
+    print(beg);
+    cout << "\n------------------\n";
+    removePrimes(beg);
+    print(beg);
+}
