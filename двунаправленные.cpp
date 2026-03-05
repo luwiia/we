@@ -153,54 +153,54 @@ int maxi(list* beg) {
 //	return true;
 //}
 
-//int res(list* beg) {
-//	int sum = 0;
+int res(list* beg) {
+	int sum = 0;
+	list* left = beg;
+	list* right = beg;
+
+	while (right->next != NULL) {
+		right = right->next;
+	} 
+	while (left != NULL) {
+			sum += (left->info) * (right->info);
+			left = left->next;
+			right = right->prev;
+			
+	}
+	return sum;
+}
+
+//int search(list* beg) {
 //	list* left = beg;
 //	list* right = beg;
+//	int flower = NULL;
+//	while (right->next != NULL) {
+//		right = right->next;
+//	}
+//	while (left != NULL) {
+//		if (right->info % 2 == 0) { return right->info; }
+//		(right = right->prev);
+//	}
+//	return 0;
+//}
+//
+//void replace(list* beg) {
+//	list* left = beg;
+//	list* right = beg;
+//	int flower = search(beg);
 //
 //	while (right->next != NULL) {
 //		right = right->next;
-//	} 
-//	while (left != NULL) {
-//			sum += (left->info) * (right->info);
-//			left = left->next;
-//			right = right->prev;
-//			
 //	}
-//	return sum;
+//	while (left != NULL) {
+//		if (left->info % 10 == 5) left->info = flower;
+//		left = left->next;
+//	}
 //}
-
-int search(list* beg) {
-	list* left = beg;
-	list* right = beg;
-	int flower = NULL;
-	while (right->next != NULL) {
-		right = right->next;
-	}
-	while (left != NULL) {
-		if (right->info % 2 == 0) { return right->info; }
-		(right = right->prev);
-	}
-	return 0;
-}
-
-void replace(list* beg) {
-	list* left = beg;
-	list* right = beg;
-	int flower = search(beg);
-
-	while (right->next != NULL) {
-		right = right->next;
-	}
-	while (left != NULL) {
-		if (left->info % 10 == 5) left->info = flower;
-		left = left->next;
-	}
-}
 
 int main() {
 	list* beg = make();
 	print(beg);
-	replace(beg);
-	print(beg);
+	cout << "\n------------------\n";
+	cout << res(beg);
 }
