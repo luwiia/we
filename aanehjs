@@ -1,1 +1,84 @@
 
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+int main() {
+    cv::Mat img = cv::imread("test_image.jpg");
+    if (img.empty()) {
+        std::cout << "Ошибка: изображение не найдено!" << std::endl;
+        return -1;
+    }
+
+    cv::Mat hsv, mask, result;
+    cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
+
+    // ===== ЗАДАЕМ ПРЯМУЮ ПО ДВУМ ТОЧКАМ =====
+    cv::Point p1(86, 3);    // Начало прямой
+    cv::Point p2(222, 222); // Конец прямой
+    
+    // Вычисляем параметры прямой: y = k*x + b
+    float k = (float)(p2.y - p1.y) / (p2.x - p1.x);
+    float b = p1.y - k * p1.x;
+    
+    // Создаем результат, изначально черный
+    result = cv::Mat::zeros(img.rows, img.cols, CV_8UC3);
+    // ========================================
+
+    // Диапазон для синего цвета
+    cv::Scalar lower_blue(100, 150, 50);
+    cv::Scalar upper_blue(140, 255, 255);
+
+    // Создаем маску по цвету
+    cv::inRange(hsv, lower_blue, upper_blue, mask);
+
+    // Обрабатываем каждый пиксель
+    for (int y = 0; y < img.rows; y++) {
+        for (int x = 0; x < img.cols; x++) {
+            
+            // Вычисляем положение на прямой
+            float line_y = k * x + b;
+            
+            // Если пиксель ВЫШЕ прямой - оставляем черным (уже и так черный)
+            if (y < line_y) {
+                continue; // Пропускаем, result уже черный
+            }
+            
+            // Если пиксель НИЖЕ прямой и попадает в маску синего
+            if (mask.at<uchar>(y, x) == 255) {
+                result.at<cv::Vec3b>(y, x) = img.at<cv::Vec3b>(y, x); // Копируем цвет
+            }
+            // Если ниже прямой, но не синий - остается черным
+        }
+    }
+
+    // ===== ВИЗУАЛИЗАЦИЯ =====
+    // Рисуем прямую на оригинале
+    cv::Mat img_with_line = img.clone();
+    cv::line(img_with_line, p1, p2, cv::Scalar(0, 0, 255), 2);
+    cv::circle(img_with_line, p1, 5, cv::Scalar(0, 255, 0), -1);
+    cv::circle(img_with_line, p2, 5, cv::Scalar(255, 0, 0), -1);
+    
+    // Создаем визуализацию маски области
+    cv::Mat area_visual = cv::Mat::zeros(img.rows, img.cols, CV_8UC3);
+    for (int y = 0; y < img.rows; y++) {
+        for (int x = 0; x < img.cols; x++) {
+            float line_y = k * x + b;
+            if (y >= line_y) {
+                area_visual.at<cv::Vec3b>(y, x) = cv::Vec3b(255, 255, 255); // Белым цветом ниже прямой
+            }
+        }
+    }
+    // =========================
+
+    cv::imshow("Original with line (RED line)", img_with_line);
+    cv::imshow("Area below line (white)", area_visual);
+    cv::imshow("Color Mask (blue detection)", mask);
+    cv::imshow("Final Result (black above line)", result);
+
+    std::cout << "Параметры прямой: y = " << k << " * x + " << b << std::endl;
+    std::cout << "ВСЁ, что выше прямой - ЧЕРНОЕ" << std::endl;
+    std::cout << "Ниже прямой - выделены только синие объекты" << std::endl;
+
+    cv::waitKey(0);
+    return 0;
+}
