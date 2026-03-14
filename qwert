@@ -1,0 +1,78 @@
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+int main() {
+    cv::Mat img = cv::imread("test_image.jpg");
+    if (img.empty()) {
+        std::cout << "Ошибка: изображение не найдено!" << std::endl;
+        return -1;
+    }
+
+    cv::Mat hsv, mask, result;
+    cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
+
+    // ===== ЗАДАЕМ ПРЯМУЮ ПО ДВУМ ТОЧКАМ =====
+    cv::Point p1(86, 3);    // Начало прямой
+    cv::Point p2(222, 222); // Конец прямой
+    
+    // Вычисляем параметры прямой: y = k*x + b
+    float k = (float)(p2.y - p1.y) / (p2.x - p1.x);
+    float b = p1.y - k * p1.x;
+    
+    // Создаем маску для области НИЖЕ прямой (которую будем обрабатывать)
+    cv::Mat area_mask = cv::Mat::zeros(img.rows, img.cols, CV_8UC1);
+    
+    // Заполняем область НИЖЕ прямой белым цветом (255)
+    for (int y = 0; y < img.rows; y++) {
+        for (int x = 0; x < img.cols; x++) {
+            float line_y = k * x + b;
+            if (y >= line_y) { // Ниже или на прямой
+                area_mask.at<uchar>(y, x) = 255;
+            }
+        }
+    }
+    // ========================================
+
+    // Диапазон для синего цвета
+    cv::Scalar lower_blue(100, 150, 50);
+    cv::Scalar upper_blue(140, 255, 255);
+
+    // Создаем маску по цвету
+    cv::inRange(hsv, lower_blue, upper_blue, mask);
+
+    // КОМБИНИРУЕМ ДВЕ МАСКИ:
+    // Оставляем только те пиксели, которые:
+    // 1. Попадают в цветовой диапазон (mask) И
+    // 2. Находятся НИЖЕ прямой (area_mask)
+    cv::Mat final_mask;
+    cv::bitwise_and(mask, area_mask, final_mask);
+
+    // Применяем финальную маску к исходному изображению
+    cv::bitwise_and(img, img, result, final_mask);
+
+    // ===== ВИЗУАЛИЗАЦИЯ =====
+    // Рисуем прямую на оригинале
+    cv::Mat img_with_line = img.clone();
+    cv::line(img_with_line, p1, p2, cv::Scalar(0, 0, 255), 2);
+    cv::circle(img_with_line, p1, 5, cv::Scalar(0, 255, 0), -1);
+    cv::circle(img_with_line, p2, 5, cv::Scalar(255, 0, 0), -1);
+    
+    // Создаем цветную маску для наглядности
+    cv::Mat colored_mask;
+    cv::cvtColor(final_mask, colored_mask, cv::COLOR_GRAY2BGR);
+    
+    // =========================
+
+    // Отображаем результаты
+    cv::imshow("Original with line (RED line)", img_with_line);
+    cv::imshow("Color Mask (blue detection)", mask);
+    cv::imshow("Area Mask (white = below line)", area_mask);
+    cv::imshow("Combined Mask (color + area)", final_mask);
+    cv::imshow("Final Result (only below line)", result);
+
+    std::cout << "Параметры прямой: y = " << k << " * x + " << b << std::endl;
+    std::cout << "Область выше прямой (y < line_y) - исключена из обработки" << std::endl;
+
+    cv::waitKey(0);
+    return 0;
+}
