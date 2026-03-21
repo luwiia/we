@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+struct tree{
+    int info;
+    tree* L;
+    tree* R;
+    
+};
+
+void add(tree* t, int x){
+    tree* q;
+    if(x < t-> info)
+        if(t -> L == NULL){
+            q = new(tree);
+            q ->info = x;
+            q -> L = NULL;
+            q -> R = NULL;
+            t -> L = q;
+        }
+        else add(t -> L, x);  // Исправлено: было t->R, должно быть t->L
+    
+    else if(x > t->info) {     // Добавлена обработка случая x > t->info
+        if(t -> R == NULL){
+            q = new(tree);
+            q ->info = x;
+            q -> L = NULL;
+            q -> R = NULL;
+            t -> R = q;
+        }
+        else add(t -> R, x);
+    }
+    // Если x == t->info, ничего не делаем (игнорируем дубликаты)
+}
+
+void print(tree*p)
+{
+    if (p != NULL){
+        cout << "\nElem:" << p->info;
+        cout << "\n--------------------------------\n";
+        print(p->L);
+        print(p->R); //переход к следующему элементу;
+    }
+}
+
+
+int main() {
+    int x;
+    tree* beg = new(tree);
+    cin >> x;
+    beg->info = x;
+    beg->L = NULL;
+    beg->R = NULL;
+    while (x!=0){
+        cin >> x;
+        if (x != 0) add(beg, x);
+    }
+    print(beg);
+    
+   
+}
