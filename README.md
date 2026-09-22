@@ -92,9 +92,10 @@
     <shipmentId>TRUCK_2026_09_001</shipmentId>
     <image>/9j/4AAQSkZJRgABAQEASABIAAD...</image>
 </predictionRequest>
-Пример ответа (XML, HTTP 201 Created / 200 OK):
+```
 
-XML
+**Пример ответа (XML, HTTP 201 Created / 200 OK):**
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <prediction>
     <shipmentId>TRUCK_2026_09_001</shipmentId>
@@ -104,16 +105,23 @@ XML
     <createdAt>2026-09-22T19:00:00Z</createdAt>
     <cached>false</cached>
 </prediction>
-5.2. Подтверждение оценки экспертом (PUT /api/v1/shipments/{shipment_id}/confirmed-load)
+```
+
+### 5.2. Подтверждение оценки экспертом (`PUT /api/v1/shipments/{shipment_id}/confirmed-load`)
 Позволяет оператору/логисту зафиксировать фактическую загрузку кузова для формирования обучающего пула.
 
-XML
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <confirmation>
     <loadPct>95.00</loadPct>
 </confirmation>
-6. Структура репозитория и артефактов
-Plaintext
+```
+
+---
+
+## 6. Структура репозитория и артефактов
+
+```text
 .
 ├── api/
 │   ├── app.py                     # FastAPI сервер (XML API, SQLite кэш)
@@ -139,42 +147,4 @@ Plaintext
 ├── docker-compose.yml             # Конфигурация развертывания сервиса
 ├── requirements.txt               # Зависимости проекта
 └── README.md
-Важно по весам ONNX: Каждый файл .onnx жестко связан с парным файлом .onnx.data. Оба файла должны находиться в одной директории models_onnx/ и не должны переименовываться.
-
-7. Инструкция по запуску (Quickstart)
-7.1. Установка окружения
-Bash
-# Клонирование и переход в проект
-git clone [https://github.com/your-org/cargo-load-estimator.git](https://github.com/your-org/cargo-load-estimator.git)
-cd cargo-load-estimator
-
-# Виртуальное окружение
-python -m venv venv
-# Linux:
-source venv/bin/activate
-# Windows:
-# .\venv\Scripts\Activate.ps1
-
-pip install --upgrade pip
-pip install -r requirements.txt
-7.2. Инференс и сабмит через ONNX
-Bash
-# Инференс одного тестового снимка
-python -m src.predict_onnx --image test/images/img_00b135ede40393ac4459.jpg
-
-# Формирование итогового submission_onnx.csv (307 фото, ~13 минут на CPU)
-python -m src.predict_onnx --all
-7.3. Запуск веб-сервиса
-Bash
-# Локальный старт FastAPI через Uvicorn
-uvicorn api.app:app --host 0.0.0.0 --port 8000 --workers 1
-
-# Запуск в Docker Compose
-docker compose up --build -d
-
-# Проверка статуса
-curl http://localhost:8000/api/v1/health
-7.4. Дообучение модели на новых данных
-Bash
-python -m src.finetune --csv new_data.csv --images new_images/ --epochs 5
-Скрипт выполняет дообучение весов с пониженным шагом (lr=1e-5), снижая MAE на контрольной выборке на ~1.15 п.п.
+```
