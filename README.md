@@ -210,3 +210,22 @@ curl http://localhost:8000/api/v1/health
 python -m src.finetune --csv new_data.csv --images new_images/ --epochs 5
 ```
 *Скрипт выполняет дообучение весов с пониженным шагом (`lr=1e-5`), снижая MAE на контрольной выборке на ~1.15 п.п.*
+
+## 8. Загрузка предобученных весов (Models Download)
+
+В связи с тем, что суммарный размер файлов моделей превышает лимиты репозитория, продакшен-архив размещён на Google Диске.
+
+* **Ссылка для скачивания:** [Google Диск — Скачать models_onnx.zip (692 МБ)](https://drive.google.com/drive/folders/11V44fB17wfhkllkmC_5hVbbtK88cMTy7?usp=sharing)
+
+### Инструкция по установке:
+1. Скачайте архив `models_onnx.zip` по ссылке выше.
+2. Распакуйте его в корень проекта, чтобы образовалась папка `models_onnx/`.
+3. Убедитесь, что внутри находятся все 10 парных моделей (B3 и B5 на 5 фолдов):
+   ```text
+   models_onnx/
+   ├── best_b3_fold0.onnx
+   ├── best_b3_fold0.onnx.data
+   ├── ... (фолды 1-4 для B3)
+   ├── best_b5_fold0.onnx
+   ├── best_b5_fold0.onnx.data
+   └── ... (фолды 1-4 для B5)
